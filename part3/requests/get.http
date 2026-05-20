@@ -1,0 +1,5 @@
+### obtener datos
+GET http://localhost:3001/api/persons
+
+### obtener datos de agenda teléfonica
+GET http://localhost:3001/info
