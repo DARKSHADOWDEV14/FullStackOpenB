@@ -1,20 +1,25 @@
 import express from 'express'
 import cors from 'cors'
 import Person from './models/person.js'
+import connectionString from "./mongo.js"
+import middleware from './utils/middleware.js'
 
+connectionString();
 
 const app = express()
 app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
 
+app.use(middleware.requestLogger)
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
+
+app.get('/', (req, res) => {
+  res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/info', (req, res) => {
-  const quantity = persons.length
+app.get('/info', async (req, res) => {
+  const quantity = await Person.countDocuments({})
   const date = new Date()
 
   res.send(`
@@ -23,9 +28,9 @@ app.get('/info', (req, res) => {
   `)
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
-    response.json(persons)
+    res.json(persons)
   })
 })
 
@@ -36,23 +41,58 @@ app.get('/api/persons/:id', (req, res) => {
       if (person) {
         res.json(person)
       } else {
-        res.status(404).end()
+        res.status(404).end("Not found persons with id " + req.params.id)
       }
     })
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', (req, res) => {
-  const body = req.body
+app.post('/api/persons', (req, res, next) => {
+  const { name, number } = req.body
+
+  if (!name || !number) {
+    return next(new Error('name and number missing'))
+  }
+
+
 
   const person = new Person({
-    name: body.name,
-    number: body.number,
+    name: name,
+    number: number,
   })
 
   person.save().then(savedPerson => {
     res.json(savedPerson)
   })
+  .catch(error => next(error))
 })
+
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end("Deleted person with id " + request.params.id)
+    })
+    .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const { name, number } = request.body
+
+  const person = {
+    name: name,
+    number: number,
+  }
+
+  Person.findByIdAndUpdate(
+    request.params.id, person, { new: true, runValidators: true, context: 'query' })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT)

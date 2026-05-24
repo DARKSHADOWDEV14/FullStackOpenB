@@ -1,0 +1,8 @@
+### actualizar un recurso existente con PUT
+PUT http://localhost:3001/api/persons/6a130c28bf7def637e5d1c0a
+Content-Type: application/json
+
+{
+  "name": "Updated Name23",
+  "number": "123-456-7890"
+}

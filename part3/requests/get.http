@@ -3,3 +3,9 @@ GET http://localhost:3001/api/persons
 
 ### obtener datos de agenda teléfonica
 GET http://localhost:3001/info
+
+### obtener datos de la persona con id 1
+GET http://localhost:3001/api/persons/6a131ba9fe8c271a92c7f3ba
+
+### obtener datos de la persona con id incorrecto
+GET http://localhost:3001/api/persons/6a131ba9fe8c271a92c7f3b1

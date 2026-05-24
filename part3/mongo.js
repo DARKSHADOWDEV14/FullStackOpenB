@@ -1,27 +1,16 @@
-import mongoose from 'mongoose'
-import 'dotenv/config'
+import mongoose from "mongoose";
+import "dotenv/config";
 
+const connectionString = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI)
+    console.log('connected to MongoDB')
+  } catch (error) {
+    console.log('error connecting to MongoDB:', error.message)
+  }
+}
 
-const url = process.env.MONGODB_URI
-
-
-mongoose.connect(url)
-.then(() => {
-  console.log('connected to MongoDB')
-})
-.catch((error) => {
-  console.log('error connecting to MongoDB:', error.message)
-})
-
-
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-})
-
-const Person = mongoose.model('Person', personSchema)
-
+export default connectionString
 
 // Person.find({}).then(result => {
 //   result.forEach(person => {
@@ -43,4 +32,3 @@ const Person = mongoose.model('Person', personSchema)
 //     console.log('error saving person:', error.message)
 //     mongoose.connection.close()
 //   })
-
