@@ -1,4 +1,4 @@
-const requestLogger = (request, response, next) => {
+ export const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
   console.log('Body:  ', request.body)
@@ -7,11 +7,11 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-const unknownEndpoint = (request, response) => {
+ export const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
-const errorHandler = (error, request, response, next) => {
+export const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
@@ -23,8 +23,3 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-export default {
-  requestLogger,
-  unknownEndpoint,
-  errorHandler,
-}
