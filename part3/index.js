@@ -35,7 +35,7 @@ app.get('/api/persons', (req, res) => {
 })
 
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
     .then(person => {
       if (person) {
@@ -51,7 +51,9 @@ app.post('/api/persons', (req, res, next) => {
   const { name, number } = req.body
 
   if (!name || !number) {
-    return next(new Error('name and number missing'))
+    return res.status(400).json({
+    error: 'name or number missing'
+  })
   }
 
 
@@ -69,8 +71,8 @@ app.post('/api/persons', (req, res, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
-      response.status(204).end("Deleted person with id " + request.params.id)
+    .then(() => {
+      response.status(204).end()
     })
     .catch(error => next(error))
 })
@@ -95,5 +97,6 @@ app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT)
-console.log(`Server running on port http://localhost:${PORT}`)
+app.listen(PORT, () => {
+  console.log(`Server running on port http://localhost:${PORT}`)
+})
