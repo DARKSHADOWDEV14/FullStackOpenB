@@ -52,6 +52,39 @@ test('the first person is Andres', async () => {
   assert(names.includes('Andres'))
 })
 
+test('person unique identifier property is named id', async () => {
+  const response = await api
+    .get('/api/persons')
+
+  const person = response.body[0]
+
+  assert(person.id !== undefined)
+})
+
+test('a valid person can be added', async () => {
+  const newPerson = {
+    name: 'John Doe',
+    number: '555-1234',
+  }
+
+  await api
+    .post('/api/persons')
+    .send(newPerson)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/persons')
+
+  const persons = response.body
+
+  assert.strictEqual(persons.length, initialPersons.length + 1)
+
+  const names = persons.map(person => person.name)
+
+  assert(names.includes('John Doe'))
+
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
