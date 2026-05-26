@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env  NODE_ENV=test node --test"
   },
   "eslintConfig": {
     "extends": "./eslint.config.js",
@@ -24,8 +25,10 @@
     "nodemon": "3.1.14"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@stylistic/eslint-plugin": "^5.10.0",
-    "globals": "^17.6.0"
+    "@eslint/js": "10.0.1",
+    "@stylistic/eslint-plugin": "5.10.0",
+    "cross-env": "10.1.0",
+    "globals": "17.6.0",
+    "supertest": "^7.2.2"
   }
 }

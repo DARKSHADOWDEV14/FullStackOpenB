@@ -23,3 +23,16 @@ export default defineConfig([
 Inspeccionar y validar un archivo como index.js se puede hacer con el siguiente comando:
 
 npx eslint index.js
+
+npm install --save-dev cross-env 
+se ejecuta este código cuando se coloca NODE_ENV en el package.json
+"start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    // ...
+    "test": "cross-env  NODE_ENV=test node --test"
+
+    NODE
+
+npm install --save-dev supertest
+
+npm test -- --test-only
