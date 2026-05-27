@@ -3,6 +3,7 @@ import Person from '../models/person.js'
 
 const personsRouter = express.Router()
 
+
 personsRouter.get('/', (req, res) => {
   Person.find({})
     .then(persons => {

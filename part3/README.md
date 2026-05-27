@@ -36,3 +36,5 @@ se ejecuta este código cuando se coloca NODE_ENV en el package.json
 npm install --save-dev supertest
 
 npm test -- --test-only
+
+npm install bcrypt
