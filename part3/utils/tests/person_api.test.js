@@ -174,7 +174,7 @@ test('creation fails with invalid username', async () => {
   )
 })
 
-test.only('creation fails with short password', async () => {
+test('creation fails with short password', async () => {
   const newUser = {
     username: 'andres',
     name: 'Andres',

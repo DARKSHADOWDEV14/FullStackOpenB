@@ -38,3 +38,4 @@ npm install --save-dev supertest
 npm test -- --test-only
 
 npm install bcrypt
+npm install jsonwebtoken

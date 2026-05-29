@@ -3,7 +3,17 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "username": "newuser2",
-  "name": "New User",
-  "password": "password123"
+  "username": "root",
+  "name": "Superuser",
+  "password": "salainen"
+}
+
+### solicitud POST para crear un nuevo usuario
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "mluukkai",
+  "name": "Matti Luukkainen",
+  "password": "salainen"
 }

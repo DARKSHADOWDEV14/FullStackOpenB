@@ -1,8 +1,21 @@
 ### Agregar usuario
 POST http://localhost:3001/api/persons
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2YTE4YmJlMjU3MjI2Yjg1YWJhZDllYTgiLCJpYXQiOjE3ODAwMDU5NDZ9.F3_KQ-5drRMJPIaGQQHXZkmTJm7q2tfR7R0zpBhBSbc
 
 {
-  "name": "Andrew david",
-  "number": "123456"
+  "name": "root",
+  "number": "salainen"
+
 }
+
+### creacion de notas sin token jwt
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "root",
+  "number": "salainen"
+
+}
+
