@@ -1,0 +1,10 @@
+### actualizar
+PUT http://localhost:3003/api/blogs/6a19a904af1ac430ab26cd59
+Content-Type: application/json
+
+{
+  "title": "My first blog",
+  "author": "Andrew",
+  "url": "http://myblog4.com",
+  "likes": 3
+}

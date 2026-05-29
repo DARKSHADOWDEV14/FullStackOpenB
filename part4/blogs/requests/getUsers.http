@@ -1,0 +1,2 @@
+### obtener resultado de usuarios
+GET http://localhost:3003/api/users

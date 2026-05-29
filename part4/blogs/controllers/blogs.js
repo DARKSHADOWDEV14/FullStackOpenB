@@ -5,6 +5,10 @@ const blogsRouter = express.Router()
 blogsRouter.get('/', (request, response) => {
   Blog
     .find({})
+    .populate('user', {
+      username: 1,
+      name: 1,
+    })
     .then(blogs => {
       response.json(blogs)
     })
