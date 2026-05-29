@@ -1,31 +1,46 @@
 import express from 'express'
 import Blog from '../models/blog.js'
-const blogsRouter = express.Router()    
+const blogsRouter = express.Router() 
+import User from '../models/user.js'   
 
-blogsRouter.get('/', (request, response) => {
-  Blog
+blogsRouter.get('/', async (request, response) => {
+  const blogs = await Blog
     .find({})
     .populate('user', {
       username: 1,
       name: 1,
     })
-    .then(blogs => {
-      response.json(blogs)
-    })
+  response.json(blogs)
 })
 
 blogsRouter.post('/', async (req, res) => {
-  const body = req.body
+  const {title, author, url, likes, userId} = req.body
 
-  if (!body.title || !body.url) {
+  const user = await User.findById(userId) // prueba de blog creado por usuario
+
+  if (!user) {
+    return res.status(400).json({
+      error: 'invalid user'
+    })
+  }
+
+  if (!title || !url) {
     return res.status(400).json({
       error: 'title or url missing',
     })
   }
 
-  const blog = new Blog(body)
+  const blog = new Blog({
+    title: title,
+    author: author,
+    url: url,
+    likes: likes || 0,
+    user: user.id, // prueba de blog creado por usuario
+  })
 
   const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id) // prueba de blog creado por usuario
+  await user.save()
 
   res.status(201).json(savedBlog)
 })
@@ -59,7 +74,10 @@ blogsRouter.put('/:id', async (req, res, next) => {
         runValidators: true,
         context: 'query',
       }
-    )
+    ).populate('user', {
+  username: 1,
+  name: 1,
+})
 
     res.json(updatedBlog)
   } catch (error) {

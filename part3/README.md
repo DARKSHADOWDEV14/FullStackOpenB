@@ -39,3 +39,7 @@ npm test -- --test-only
 
 npm install bcrypt
 npm install jsonwebtoken
+
+npm install express-async-errors
+require('express-async-errors')
+La 'magia' de esta librería nos permite eliminar por completo los bloques try-catch. Por ejemplo, la ruta para eliminar una nota
