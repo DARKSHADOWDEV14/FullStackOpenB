@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 
 import connectionString from "./mongo.js"
-import { requestLogger, unknownEndpoint, errorHandler} from './utils/middleware.js'
+import { requestLogger, unknownEndpoint, errorHandler } from './utils/middleware.js'
 import personsRouter from './controllers/persons.js'
 import usersRouter from './controllers/users.js'
 import loginRouter from './controllers/login.js'

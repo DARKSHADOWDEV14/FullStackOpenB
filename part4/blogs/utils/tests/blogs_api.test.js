@@ -4,6 +4,7 @@ import assert from 'node:assert'
 import mongoose from 'mongoose'
 import app from '../../app.js'
 import Blog from '../../models/blog.js'
+import User from '../../models/user.js'
 
 const api = supertest(app)
 
@@ -18,6 +19,7 @@ const initialBlogs = [
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
   await new Blog({
     title: 'First blog',
@@ -32,6 +34,7 @@ beforeEach(async () => {
 test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
+    .set('Authorization', `Bearer 6a19b3d7171e3699e0cc58c4`)
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
@@ -45,7 +48,7 @@ test('blogs have a unique identifier named id', async () => {
   assert.strictEqual(blog._id, undefined)
 })
 
-test('a valid blog can be added', async () => {
+test.only('a valid blog can be added', async () => {
   const newBlog = {
     title: 'Second blog',
     author: 'Jane Doe',
@@ -61,11 +64,10 @@ test('a valid blog can be added', async () => {
 
   const response = await api.get('/api/blogs')
 
-  const blogs = response.body
+  const titles = response.body.map(r => r.content)
 
-  assert.strictEqual(blogs.length, initialBlogs.length + 1)
+  assert.strictEqual(response.body.length, initialBlogs.length + 1)
 
-  const titles = blogs.map(blog => blog.title)
 
   assert(titles.includes('Second blog'))
 
@@ -144,7 +146,7 @@ describe('deletion of a blog', () => {
 })
 })
 
-describe.only('updating a blog', () => {
+describe('updating a blog', () => {
 test('a blog can be updated', async () => {
   const blogsAtStart = await api.get('/api/blogs')
 

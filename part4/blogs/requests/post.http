@@ -16,7 +16,7 @@ Content-Type: application/json
 {
   "title": "My first blog",
   "author": "Andrew",
-  "url": "http://myblog10.com",
+  "url": "http://myblog14.com",
   "likes": 3,
   "userId": "6a19b3d7171e3699e0cc58c4"
 }

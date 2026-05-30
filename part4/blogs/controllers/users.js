@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt'
+import bcrypt from 'bcrypt'
 import User from '../models/user.js'
 import express from 'express'
 const usersRouter = express.Router()
@@ -25,7 +25,7 @@ usersRouter.post('/', async (request, response) => {
   }
 
   const saltRounds = 10
-  const passwordHash = await hash(password, saltRounds)
+  const passwordHash = await bcrypt.hash(password, saltRounds)
 
   const user = new User({
     username,
