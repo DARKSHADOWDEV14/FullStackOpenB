@@ -1,10 +1,10 @@
-import { info, err } from './logger.js'
+import logger from './logger.js'
 
 export const requestLogger = (request, response, next) => {
-  info('Method:', request.method)
-  info('Path:  ', request.path)
-  info('Body:  ', request.body)
-  info('---')
+  logger.info('Method:', request.method)
+  logger.info('Path:  ', request.path)
+  logger.info('Body:  ', request.body)
+  logger.info('---')
   next()
 }
 
@@ -13,7 +13,7 @@ export const unknownEndpoint = (request, response) => {
 }
 
 export const errorHandler = (error, request, response, next) => {
-  err(error.message)
+  logger.err(error.message)
 
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
