@@ -3,12 +3,9 @@ import cors from 'cors'
 import connectionString from './mongo.js'
 import usersRouter from './controllers/users.js'
 import blogsRouter from './controllers/blogs.js'
-import logger from './utils/logger.js'
 import { requestLogger, unknownEndpoint, errorHandler } from './utils/middleware.js'
+import loginRouter from './controllers/login.js'
 
-
-
-logger.info('Connecting to MongoDB...')
 connectionString()
 
 const app = express()
@@ -21,6 +18,7 @@ app.use(requestLogger)
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)

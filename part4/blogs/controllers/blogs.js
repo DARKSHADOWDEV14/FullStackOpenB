@@ -2,6 +2,8 @@ import express from "express";
 import Blog from "../models/blog.js";
 const blogsRouter = express.Router();
 import User from "../models/user.js";
+import jwt from 'jsonwebtoken'
+import { SECRET } from '../utils/config.js'
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", {
@@ -11,16 +13,40 @@ blogsRouter.get("/", async (request, response) => {
   response.json(blogs);
 });
 
-blogsRouter.post("/", async (req, res) => {
-  const { title, author, url, likes, userId } = req.body;
-
-  const user = await User.findById(userId); // prueba de blog creado por usuario
-
-  if (!user) {
-    return res.status(400).json({
-      error: "invalid user",
-    });
+blogsRouter.get("/:id", async (req, res, next) => {
+  try {
+    const blog = await Blog.findById(req.params.id)
+    res.json(blog);
+  } catch (error) {
+    next(error);
   }
+});
+
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '')
+  }
+  return null
+}
+
+blogsRouter.post("/", async (req, res) => {
+  const { title, author, url, likes } = req.body;
+
+  const decodedToken = jwt.verify(getTokenFrom(req), SECRET)
+
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: 'token invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
+
+  // const user = await User.findById(userId); // prueba de blog creado por usuario
+
+  // if (!user) {
+  //   return res.status(400).json({
+  //     error: "invalid user",
+  //   });
+  // }
 
   if (!title || !url) {
     return res.status(400).json({

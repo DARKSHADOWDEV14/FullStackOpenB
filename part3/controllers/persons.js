@@ -2,16 +2,10 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import Person from "../models/person.js";
 import User from "../models/user.js";
+import { SECRET } from '../utils/config.js'
 
 const personsRouter = express.Router();
 
-const getTokenFrom = (request) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.startsWith("Bearer ")) {
-    return authorization.replace("Bearer ", "");
-  }
-  return null;
-};
 
 personsRouter.get("/", async (req, res) => {
   const persons = await Person.find({}).populate("user", {
@@ -47,9 +41,14 @@ personsRouter.post("/", async (req, res, next) => {
       });
     }
 
-    
+    const decodedToken = jwt.verify(req.token, SECRET);
 
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET);
+    if (!req.token) {
+  return res.status(401).json({
+    error: 'token missing'
+  })
+}
+
     if (!decodedToken.id) {
       return res.status(401).json({ error: "token invalid" });
     }

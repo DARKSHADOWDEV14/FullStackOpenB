@@ -4,5 +4,5 @@ import { PORT } from './utils/config.js'
 
 
 app.listen(PORT, () => {
-  logger.info(`Server running on port http://localhost:${PORT}`)
+  logger.info(`Server running on port http://localhost:${ PORT }`)
 })

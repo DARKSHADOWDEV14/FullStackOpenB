@@ -6,7 +6,7 @@ import app from '../../app.js'
 import Person from '../../models/person.js'
 import bcrypt from 'bcrypt'
 import User from '../../models/user.js'
-import { usersInDb } from './test_helper.js'
+import { usersInDb, personsInDb } from './test_helper.js'
 
 const api = supertest(app)
 
@@ -192,6 +192,26 @@ test('creation fails with short password', async () => {
     )
   )
 })
+})
+
+test('adding a person fails with status code 401 if token is not provided', async () => {
+
+  const newPerson = {
+    name: 'Person without token',
+    number: '555-1234'
+  }
+
+  await api
+    .post('/api/persons')
+    .send(newPerson)
+    .expect(401)
+
+  const personsAtEnd = await personsInDb()
+
+  assert.strictEqual(
+    personsAtEnd.length,
+    initialPersons.length
+  )
 })
 
 after(async () => {

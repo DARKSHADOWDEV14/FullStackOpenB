@@ -1,2 +1,5 @@
 ### Get all blogs
 GET http://localhost:3003/api/blogs
+
+### Get a single blog
+GET http://localhost:3003/api/blogs/6a19c1488f7a31f0c60632e3
