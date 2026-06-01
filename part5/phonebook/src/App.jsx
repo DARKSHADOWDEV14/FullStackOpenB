@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect} from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import personsServices from "./services/persons";
@@ -30,6 +31,8 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  // const personFormRef = useRef()
+
   useEffect(() => {
   personsServices
     .getAll()
@@ -42,6 +45,15 @@ const App = () => {
     })
 }, [])
 
+useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedPersonappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      personsServices.setToken(user.token)
+    }
+  }, [])
+
  const handleLogin = async (event) => {
     event.preventDefault()
     
@@ -49,13 +61,21 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+   
+
+      window.localStorage.setItem(
+        'loggedPersonappUser', JSON.stringify(user)
+      ) 
 
       personsServices.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (error) {
-      setMessage('Wrong credentials')
+      setMessage({
+        message: "Invalid username or password",
+        type: error,
+      })
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -230,14 +250,16 @@ const App = () => {
 
   return (
     <>
+    {
+      user && <p>{user.name} logged in</p>
+    }
+
     {!user ? (
 
      <LoginForm
         handleLogin={handleLogin}
         username={username}
         password={password}
-        setUsername={setUsername}
-        setPassword={setPassword}
         handleUsernameChange={handleUsernameChange}
         handlePasswordChange={handlePasswordChange}
       /> 
@@ -265,8 +287,12 @@ const App = () => {
       ))}
       </>
     )}
+
+    
       {/* <Note note={notes[0]} toggleImportance={toggleImportance} /> */}
     </>
+
+
   );
 };
 

@@ -1,6 +1,6 @@
 
 
- const LoginForm = ({ handleLogin, username, password, setUsername, setPassword, handleUsernameChange, handlePasswordChange }) => {
+ const LoginForm = ({ handleLogin, username, password, handleUsernameChange, handlePasswordChange }) => {
   return (
     <>
     <form onSubmit={handleLogin}>
