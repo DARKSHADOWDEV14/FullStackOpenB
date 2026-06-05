@@ -83,3 +83,13 @@ npm install jsonwebtoken
 npm install express-async-errors
 require('express-async-errors')
 La 'magia' de esta librería nos permite eliminar por completo los bloques try-catch. Por ejemplo, la ruta para eliminar una nota
+
+  ### npm run start:test
+  se usa para hacer el test, se debe configurar en la App así
+  /...
+  app.use('/api/notes', notesRouter)
+
+  if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
