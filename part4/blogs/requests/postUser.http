@@ -7,3 +7,13 @@ Content-Type: application/json
     "name": "Andrew",
     "password": "Andrew"
 }
+
+### New User Created
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "Matti",
+    "name": "Matti",
+    "password": "Matti"
+}
